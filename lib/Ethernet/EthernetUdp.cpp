@@ -70,6 +70,10 @@ int EthernetUDP::beginPacket(IPAddress ip, uint16_t port)
 	return Ethernet.socketStartUDP(sockindex, rawIPAddress(ip), port);
 }
 
+void EthernetUDP::resetSendOffset() {
+	_offset = 0;
+}
+
 int EthernetUDP::endPacket()
 {
 	return Ethernet.socketSendUDP(sockindex);

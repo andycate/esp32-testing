@@ -16,24 +16,36 @@ void setup()
   Ethernet.init(10);
   Ethernet.begin((uint8_t *)mac, ip);
   Udp.begin(port);
+
+  Udp.beginPacket(groundStation1, port);
 }
 
 void loop()
 {
-  Serial.println("before begin");
-  Serial.flush();
-  Udp.beginPacket(groundStation1, port);
-  Serial.println("before write");
-  Serial.flush();
-  char tosend[] = "test";
-  Udp.write((unsigned char *) tosend, 4);
-  Serial.println("before end");
-  Serial.flush();
-  Udp.endPacket();
+  // Serial.println("before begin");
+  // Serial.flush();
+  while(1) {
+    Udp.resetSendOffset();
+    // Serial.println("before write");
+    // Serial.flush();
+    char tosend[] = "itimelckdatadatadatadata";
+    // uint32_t beforeWrite = micros();
+    Udp.write((unsigned char *) tosend, 24);
+    // uint32_t beforeEnd = micros();
+    // Serial.println("before end");
+    // Serial.flush();
+    Udp.endPacket();
+    // uint32_t end = micros();
 
-  Serial.println(count);
-  Serial.flush();
-  count += 1;
+    // Serial.print("write: ");
+    // Serial.print(beforeEnd - beforeWrite);
+    // Serial.print(" end: ");
+    // Serial.println(end - beforeEnd);
+  }
 
-  delay(1000);
+  // Serial.println(count);
+  // Serial.flush();
+  // count += 1;
+
+  // delay(1000);
 }

@@ -152,6 +152,7 @@ public:
 	// Start building up a packet to send to the remote host specific in host and port
 	// Returns 1 if successful, 0 if there was a problem resolving the hostname or port
 	virtual int beginPacket(const char *host, uint16_t port);
+	void resetSendOffset();
 	// Finish off this packet and send it
 	// Returns 1 if the packet was sent successfully, 0 if there was an error
 	virtual int endPacket();

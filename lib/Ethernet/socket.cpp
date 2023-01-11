@@ -468,10 +468,6 @@ uint16_t EthernetClass::socketBufferData(uint8_t s, uint16_t offset, const uint8
 
 bool EthernetClass::socketStartUDP(uint8_t s, uint8_t* addr, uint16_t port)
 {
-	if ( ((addr[0] == 0x00) && (addr[1] == 0x00) && (addr[2] == 0x00) && (addr[3] == 0x00)) ||
-	  ((port == 0x00)) ) {
-		return false;
-	}
 	SPI.beginTransaction(SPI_ETHERNET_SETTINGS);
 	W5500.writeSnDIPR(s, addr);
 	W5500.writeSnDPORT(s, port);
@@ -499,7 +495,7 @@ bool EthernetClass::socketSendUDP(uint8_t s)
 	// }
 
 	/* +2008.01 bj */
-	W5500.writeSnIR(s, SnIR::SEND_OK);
+	// W5500.writeSnIR(s, SnIR::SEND_OK);
 	SPI.endTransaction();
 
 	//Serial.printf("sendUDP ok\n");
