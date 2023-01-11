@@ -1,31 +1,39 @@
-#include "Comms.h"
-
 #include <Arduino.h>
 #include <SPI.h>
+#include <EthernetUdp.h>
+#include <Ethernet.h>
 
-uint8_t result;
+int count;
+EthernetUDP Udp;
+byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 21};
+IPAddress groundStation1(192, 168, 0, 70);
+IPAddress ip(192, 168, 0, 42);
+int port = 42069;
 
-void setup() {
+void setup()
+{
   Serial.begin(921600);
-
-  result = Comms::init(42);
+  Ethernet.init(10);
+  Ethernet.begin((uint8_t *)mac, ip);
+  Udp.begin(port);
 }
 
-void loop() {
-  Serial.println("test");
-  Serial.println(Comms::getLinkStatus());
+void loop()
+{
+  Serial.println("before begin");
+  Serial.flush();
+  Udp.beginPacket(groundStation1, port);
+  Serial.println("before write");
+  Serial.flush();
+  char tosend[] = "test";
+  Udp.write((unsigned char *) tosend, 4);
+  Serial.println("before end");
+  Serial.flush();
+  Udp.endPacket();
 
-  Comms::setReceiverIPandPort(70, 42069);
-  uint8_t tosend[] = "test";
-  Comms::sendRawPacket(tosend, 4);
+  Serial.println(count);
+  Serial.flush();
+  count += 1;
 
-  uint8_t buff[4];
-  Comms::readSUBR(buff);
-  Serial.println(buff[0]);
-  Serial.println(buff[1]);
-  Serial.println(buff[2]);
-  Serial.println(buff[3]);
-  
   delay(1000);
 }
-
